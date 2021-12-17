@@ -23,4 +23,5 @@ func main() {
 	s.RunWith(roulette.StrategyOdd())
 	s.RunWith(roulette.StrategyRed())
 	s.RunWith(roulette.StrategyDoubleStreetQuad())
+	s.RunWith(roulette.StrategyZero())
 }

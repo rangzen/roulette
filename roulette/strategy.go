@@ -94,3 +94,9 @@ func StrategyDoubleStreetQuad() Strategy {
 	s.AddBet(NewBet(1, Corner, 13, 14, 16, 17))
 	return s
 }
+
+func StrategyZero() Strategy {
+	s := NewStrategy("Zero only")
+	s.AddBet(NewBet(1, StraightUp, 0))
+	return s
+}
