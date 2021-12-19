@@ -73,6 +73,16 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 	}
 	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(avg)/float32(len(*r))))
 
+	// Percentage of games running to the max spins limit
+	fmt.Fprint(simConf.Writer, s.name, ",percentage of games running to the max spins limit,")
+	var maxSpinsCount int
+	for _, rr := range *r {
+		if len(rr) == simConf.MaxSpins {
+			maxSpinsCount++
+		}
+	}
+	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(maxSpinsCount*100)/float32(simConf.NbRun)))
+
 	// Average payroll when surviving the max number of spins
 	fmt.Fprint(simConf.Writer, s.name, ",average surviving payroll,")
 	var avgPrl int
