@@ -15,8 +15,8 @@ func main() {
 		Writer:      os.Stdout,
 		Roulette:    roulette.NewFrenchRoulette(roulette.NewRandomEngine(37)),
 		NbRun:       100000,
-		MaxSpins:    250,
-		StartAmount: 10,
+		MaxSpins:    100,
+		StartAmount: 100,
 	}
 	s := roulette.NewSimulation(simConf)
 	s.RunWith(roulette.StrategyBiColor())
