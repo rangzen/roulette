@@ -66,7 +66,7 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 	*/
 
 	// Average of number of spins
-	fmt.Fprint(simConf.Writer, s.name, ",average spins,")
+	fmt.Fprint(simConf.Writer, s.name, ",average spins before broke,")
 	var avg int
 	for _, rr := range *r {
 		avg += len(rr)
@@ -94,7 +94,6 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 		}
 	}
 	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(avgPrl)/float32(avgPrlCount)))
-
 }
 
 func IntToString2(a []int) string {
