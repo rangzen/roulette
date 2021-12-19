@@ -29,6 +29,11 @@ const (
 	end
 )
 
+var (
+	NumbersRed   []int = []int{32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3}
+	NumbersBlack []int = []int{15, 4, 2, 17, 6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26}
+)
+
 type Bet struct {
 	Amount  int
 	BetType BetType
@@ -74,14 +79,14 @@ func StrategyOdd() Strategy {
 
 func StrategyRed() Strategy {
 	s := NewStrategy("Red")
-	s.AddBet(NewBet(1, Red, 32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3))
+	s.AddBet(NewBet(1, Red, NumbersRed...))
 	return s
 }
 
 func StrategyBiColor() Strategy {
 	s := NewStrategy("Bi color")
-	s.AddBet(NewBet(1, Black, 15, 4, 2, 17, 6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26))
-	s.AddBet(NewBet(1, Red, 32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3))
+	s.AddBet(NewBet(1, Black, NumbersBlack...))
+	s.AddBet(NewBet(1, Red, NumbersRed...))
 	return s
 }
 
