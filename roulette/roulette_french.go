@@ -10,30 +10,32 @@ func NewFrenchRoulette(r EntropyEngine) Roulette {
 	}
 }
 
-func (f RouletteFrench) SpinOn(s Strategy) int {
-	spin := f.randomEngine.Spin()
+func (f RouletteFrench) Spin() int {
+	return f.randomEngine.Spin()
+}
 
+func (f RouletteFrench) PayoutWith(result int, s Strategy) int {
 	var totalWin int
 	for _, b := range s.bets {
 		var payout = -1
-		if b.BetType == Odd && spin%2 == 1 {
-			payout = 1
-		} else if b.BetType == Even && spin%2 == 0 {
-			payout = 1
+		if b.BetType == Odd && result%2 == 1 {
+			payout = 1 + 1
+		} else if b.BetType == Even && result%2 == 0 {
+			payout = 1 + 1
 		} else {
 			for _, n := range b.Numbers {
-				if spin == n {
+				if result == n {
 					switch b.BetType {
 					case StraightUp:
-						payout = 35
+						payout = 1 + 35
 					case Corner:
-						payout = 8
+						payout = 1 + 8
 					case DoubleStreet:
-						payout = 5
+						payout = 1 + 5
 					case Red:
-						payout = 1
+						payout = 1 + 1
 					case Black:
-						payout = 1
+						payout = 1 + 1
 					default:
 						panic("unknown bet type")
 					}

@@ -10,9 +10,9 @@ func TestRouletteFrenchOddWin(t *testing.T) {
 	s := NewStrategy("Odd")
 	s.AddBet(NewBet(1, Odd))
 
-	payout := f.SpinOn(s)
+	payout := f.PayoutWith(1, s)
 
-	assert.Equal(t, 1, payout)
+	assert.Equal(t, 2, payout)
 }
 
 func TestRouletteFrenchOddLost(t *testing.T) {
@@ -20,7 +20,7 @@ func TestRouletteFrenchOddLost(t *testing.T) {
 	s := NewStrategy("Odd")
 	s.AddBet(NewBet(1, Odd))
 
-	payout := f.SpinOn(s)
+	payout := f.PayoutWith(2, s)
 
 	assert.Equal(t, -1, payout)
 }
@@ -30,9 +30,9 @@ func TestRouletteFrenchEvenWin(t *testing.T) {
 	s := NewStrategy("Even")
 	s.AddBet(NewBet(1, Even))
 
-	payout := f.SpinOn(s)
+	payout := f.PayoutWith(2, s)
 
-	assert.Equal(t, 1, payout)
+	assert.Equal(t, 2, payout)
 }
 
 func TestRouletteFrenchEvenLost(t *testing.T) {
@@ -40,7 +40,7 @@ func TestRouletteFrenchEvenLost(t *testing.T) {
 	s := NewStrategy("Even")
 	s.AddBet(NewBet(1, Even))
 
-	payout := f.SpinOn(s)
+	payout := f.PayoutWith(1, s)
 
 	assert.Equal(t, -1, payout)
 }

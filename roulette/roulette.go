@@ -3,7 +3,8 @@ package roulette
 import "math/rand"
 
 type Roulette interface {
-	SpinOn(s Strategy) int
+	Spin() int
+	PayoutWith(result int, s Strategy) int
 }
 
 type EntropyEngine interface {
