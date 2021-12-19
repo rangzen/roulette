@@ -13,7 +13,7 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	simConf := roulette.SimulationConf{
 		Writer:      os.Stdout,
-		Roulette:    roulette.NewFrenchRoulette(),
+		Roulette:    roulette.NewFrenchRoulette(roulette.NewRandomEngine(37)),
 		NbRun:       100000,
 		MaxSpins:    250,
 		StartAmount: 10,

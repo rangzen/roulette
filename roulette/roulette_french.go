@@ -1,17 +1,17 @@
 package roulette
 
-import (
-	"math/rand"
-)
+type RouletteFrench struct {
+	randomEngine EntropyEngine
+}
 
-type RouletteFrench struct{}
-
-func NewFrenchRoulette() Roulette {
-	return RouletteFrench{}
+func NewFrenchRoulette(r EntropyEngine) Roulette {
+	return RouletteFrench{
+		randomEngine: r,
+	}
 }
 
 func (f RouletteFrench) SpinOn(s Strategy) int {
-	spin := int(rand.Int31n(37))
+	spin := f.randomEngine.Spin()
 
 	var totalWin int
 	for _, b := range s.bets {
