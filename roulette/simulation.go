@@ -33,7 +33,7 @@ func (s *Simulation) RunWith(strategy Strategy) Results {
 		for payroll >= strategy.MinimalBet() {
 			result = append(result, payroll)
 			spin := s.conf.Roulette.Spin()
-			payroll += s.conf.Roulette.PayoutWith(spin, strategy)
+			payroll = payroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
 			if len(result) >= s.conf.MaxSpins {
 				break
 			}
