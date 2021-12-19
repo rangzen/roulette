@@ -6,7 +6,7 @@ import (
 )
 
 func TestRouletteFrenchOddWin(t *testing.T) {
-	f := NewFrenchRoulette(NewControlledEngine(1))
+	f := NewFrenchRoulette()
 	s := NewStrategy("Odd")
 	s.AddBet(NewBet(1, Odd))
 
@@ -16,7 +16,7 @@ func TestRouletteFrenchOddWin(t *testing.T) {
 }
 
 func TestRouletteFrenchOddLost(t *testing.T) {
-	f := NewFrenchRoulette(NewControlledEngine(2))
+	f := NewFrenchRoulette()
 	s := NewStrategy("Odd")
 	s.AddBet(NewBet(1, Odd))
 
@@ -26,7 +26,7 @@ func TestRouletteFrenchOddLost(t *testing.T) {
 }
 
 func TestRouletteFrenchEvenWin(t *testing.T) {
-	f := NewFrenchRoulette(NewControlledEngine(2))
+	f := NewFrenchRoulette()
 	s := NewStrategy("Even")
 	s.AddBet(NewBet(1, Even))
 
@@ -36,7 +36,7 @@ func TestRouletteFrenchEvenWin(t *testing.T) {
 }
 
 func TestRouletteFrenchEvenLost(t *testing.T) {
-	f := NewFrenchRoulette(NewControlledEngine(1))
+	f := NewFrenchRoulette()
 	s := NewStrategy("Even")
 	s.AddBet(NewBet(1, Even))
 

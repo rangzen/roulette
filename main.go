@@ -11,12 +11,14 @@ import (
 
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
+	r := roulette.NewFrenchRoulette()
 	simConf := roulette.SimulationConf{
-		Writer:      os.Stdout,
-		Roulette:    roulette.NewFrenchRoulette(roulette.NewRandomEngine(37)),
-		NbRun:       100000,
-		MaxSpins:    100,
-		StartAmount: 100,
+		Writer:        os.Stdout,
+		EntropyEngine: roulette.NewRandomEngine(r.NumberCount()),
+		Roulette:      r,
+		NbRun:         100000,
+		MaxSpins:      100,
+		StartAmount:   100,
 	}
 	s := roulette.NewSimulation(simConf)
 	s.RunWith(roulette.StrategyBiColor())

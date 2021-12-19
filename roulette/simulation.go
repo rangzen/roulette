@@ -2,17 +2,19 @@ package roulette
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
 )
 
 type SimulationConf struct {
-	Writer      *os.File
-	Roulette    Roulette
-	NbRun       int
-	MaxSpins    int
-	StartAmount int
+	Writer        *os.File
+	EntropyEngine EntropyEngine
+	Roulette      Roulette
+	NbRun         int
+	MaxSpins      int
+	StartAmount   int
 }
 
 type Simulation struct {
@@ -32,7 +34,7 @@ func (s *Simulation) RunWith(strategy Strategy) Results {
 		result := make(RunResult, 0)
 		for payroll >= strategy.MinimalBet() {
 			result = append(result, payroll)
-			spin := s.conf.Roulette.Spin()
+			spin := s.conf.EntropyEngine.Spin()
 			payroll = payroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
 			if len(result) >= s.conf.MaxSpins {
 				break
@@ -40,7 +42,6 @@ func (s *Simulation) RunWith(strategy Strategy) Results {
 		}
 		results = append(results, result)
 	}
-
 	results.Print(s.conf, strategy)
 
 	return results
@@ -103,4 +104,36 @@ func IntToString2(a []int) string {
 		b[i] = strconv.Itoa(v)
 	}
 	return strings.Join(b, ",")
+}
+
+type EntropyEngine interface {
+	Spin() int
+}
+
+type RandomEngine struct {
+	interval int
+}
+
+func NewRandomEngine(nb int) EntropyEngine {
+	return RandomEngine{
+		interval: nb,
+	}
+}
+
+func (r RandomEngine) Spin() int {
+	return int(rand.Int31n(int32(r.interval)))
+}
+
+type ControlledEngine struct {
+	target int
+}
+
+func NewControlledEngine(target int) EntropyEngine {
+	return ControlledEngine{
+		target: target,
+	}
+}
+
+func (c ControlledEngine) Spin() int {
+	return c.target
 }

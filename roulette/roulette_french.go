@@ -1,17 +1,18 @@
 package roulette
 
 type RouletteFrench struct {
-	randomEngine EntropyEngine
 }
 
-func NewFrenchRoulette(r EntropyEngine) Roulette {
-	return RouletteFrench{
-		randomEngine: r,
-	}
+func NewFrenchRoulette() Roulette {
+	return RouletteFrench{}
 }
 
-func (f RouletteFrench) Spin() int {
-	return f.randomEngine.Spin()
+func (f RouletteFrench) Name() string {
+	return "French Roulette"
+}
+
+func (f RouletteFrench) NumberCount() int {
+	return 37
 }
 
 func (f RouletteFrench) PayoutWith(result int, s Strategy) int {
