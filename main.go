@@ -23,7 +23,9 @@ func main() {
 	s := roulette.NewSimulation(simConf)
 	s.RunWith(roulette.StrategyBiColor())
 	s.RunWith(roulette.StrategyOdd())
+	s.RunWith(roulette.StrategyEven())
 	s.RunWith(roulette.StrategyRed())
+	s.RunWith(roulette.StrategyBlack())
 	s.RunWith(roulette.StrategyDoubleStreetQuad())
 	s.RunWith(roulette.StrategyZero())
 }

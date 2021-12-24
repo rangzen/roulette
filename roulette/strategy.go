@@ -77,9 +77,21 @@ func StrategyOdd() Strategy {
 	return s
 }
 
+func StrategyEven() Strategy {
+	s := NewStrategy("Even")
+	s.AddBet(NewBet(1, Even))
+	return s
+}
+
 func StrategyRed() Strategy {
 	s := NewStrategy("Red")
 	s.AddBet(NewBet(1, Red, NumbersRed...))
+	return s
+}
+
+func StrategyBlack() Strategy {
+	s := NewStrategy("Black")
+	s.AddBet(NewBet(1, Black, NumbersBlack...))
 	return s
 }
 
