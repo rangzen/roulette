@@ -17,6 +17,14 @@ type SimulationConf struct {
 	StartAmount   int
 }
 
+const jobsByBatch = 10000
+
+type Job struct {
+	Id       int
+	Conf     *SimulationConf
+	Strategy *Strategy
+}
+
 type Simulation struct {
 	conf SimulationConf
 }
@@ -27,29 +35,52 @@ func NewSimulation(conf SimulationConf) Simulation {
 	}
 }
 
-func (s *Simulation) RunWith(strategy Strategy) Results {
-	rc := make(chan RunResult)
-	for i := 0; i < s.conf.NbRun; i++ {
-		go func() {
-			payroll := s.conf.StartAmount
+func worker(id int, jobs <-chan Job, resultsChan chan<- []RunResult) {
+	for j := range jobs {
+		//fmt.Println("worker", id, "started job", j.Id)
+		results := make(Results, 0, jobsByBatch)
+		for i := 0; i < jobsByBatch; i++ {
+			payroll := j.Conf.StartAmount
 			result := make(RunResult, 0)
-			for payroll >= strategy.MinimalBet() {
+			for payroll >= j.Strategy.MinimalBet() {
 				result = append(result, payroll)
-				spin := s.conf.EntropyEngine.Spin()
-				payroll = payroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
-				if len(result) >= s.conf.MaxSpins {
+				spin := j.Conf.EntropyEngine.Spin()
+				payroll = payroll - j.Strategy.MinimalBet() + j.Conf.Roulette.PayoutWith(spin, *j.Strategy)
+				if len(result) >= j.Conf.MaxSpins {
 					break
 				}
 			}
-			rc <- result
-		}()
+			results = append(results, result)
+		}
+		resultsChan <- results
+	}
+}
+
+func (s *Simulation) RunWith(strategy Strategy) Results {
+	numJobs := s.conf.NbRun / jobsByBatch
+	jobsChan := make(chan Job, numJobs)
+	resultsChan := make(chan []RunResult, numJobs)
+
+	for w := 1; w <= 4; w++ {
+		go worker(w, jobsChan, resultsChan)
 	}
 
-	results := make(Results, 0, s.conf.NbRun)
-	for i := 0; i < s.conf.NbRun; i++ {
-		result := <-rc
-		results = append(results, result)
+	for j := 1; j <= numJobs; j++ {
+		jobsChan <- Job{
+			Id:       j,
+			Conf:     &s.conf,
+			Strategy: &strategy,
+		}
 	}
+	close(jobsChan)
+
+	var results Results
+	results = make([]RunResult, 0, s.conf.NbRun)
+	for a := 1; a <= numJobs; a++ {
+		rs := <-resultsChan
+		results = append(results, rs...)
+	}
+
 	results.Print(s.conf, strategy)
 
 	return results
