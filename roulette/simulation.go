@@ -28,18 +28,26 @@ func NewSimulation(conf SimulationConf) Simulation {
 }
 
 func (s *Simulation) RunWith(strategy Strategy) Results {
+	rc := make(chan RunResult)
+	for i := 0; i < s.conf.NbRun; i++ {
+		go func() {
+			payroll := s.conf.StartAmount
+			result := make(RunResult, 0)
+			for payroll >= strategy.MinimalBet() {
+				result = append(result, payroll)
+				spin := s.conf.EntropyEngine.Spin()
+				payroll = payroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
+				if len(result) >= s.conf.MaxSpins {
+					break
+				}
+			}
+			rc <- result
+		}()
+	}
+
 	results := make(Results, 0, s.conf.NbRun)
 	for i := 0; i < s.conf.NbRun; i++ {
-		payroll := s.conf.StartAmount
-		result := make(RunResult, 0)
-		for payroll >= strategy.MinimalBet() {
-			result = append(result, payroll)
-			spin := s.conf.EntropyEngine.Spin()
-			payroll = payroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
-			if len(result) >= s.conf.MaxSpins {
-				break
-			}
-		}
+		result := <-rc
 		results = append(results, result)
 	}
 	results.Print(s.conf, strategy)
