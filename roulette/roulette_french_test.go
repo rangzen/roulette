@@ -5,6 +5,16 @@ import (
 	"testing"
 )
 
+func TestRouletteFrenchEvenLooseWith0(t *testing.T) {
+	f := NewFrenchRoulette()
+	s := NewStrategy("Even")
+	s.AddBet(NewBet(1, Even))
+
+	payout := f.PayoutWith(0, s)
+
+	assert.Equal(t, -1, payout)
+}
+
 func TestRouletteFrenchOddWin(t *testing.T) {
 	f := NewFrenchRoulette()
 	s := NewStrategy("Odd")

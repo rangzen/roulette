@@ -21,7 +21,7 @@ func (f RouletteFrench) PayoutWith(result int, s Strategy) int {
 		var payout = -1
 		if b.BetType == Odd && result%2 == 1 {
 			payout = 1 + 1
-		} else if b.BetType == Even && result%2 == 0 {
+		} else if b.BetType == Even && result >= 2 && result%2 == 0 {
 			payout = 1 + 1
 		} else {
 			for _, n := range b.Numbers {
