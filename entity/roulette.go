@@ -1,4 +1,4 @@
-package roulette
+package entity
 
 type Roulette interface {
 	Name() string

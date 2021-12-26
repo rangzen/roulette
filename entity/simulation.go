@@ -1,8 +1,7 @@
-package roulette
+package entity
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
 	"strconv"
 	"strings"
@@ -67,7 +66,7 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 	*/
 
 	// Average of number of spins
-	fmt.Fprint(simConf.Writer, s.name, ",average spins before broke,")
+	fmt.Fprint(simConf.Writer, s.Name, ",average spins before broke,")
 	var avg int
 	for _, rr := range *r {
 		avg += len(rr)
@@ -75,7 +74,7 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(avg)/float32(len(*r))))
 
 	// Percentage of games running to the max spins limit
-	fmt.Fprint(simConf.Writer, s.name, ",percentage of games running to the max spins limit,")
+	fmt.Fprint(simConf.Writer, s.Name, ",percentage of games running to the max spins limit,")
 	var maxSpinsCount int
 	for _, rr := range *r {
 		if len(rr) == simConf.MaxSpins {
@@ -85,7 +84,7 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(maxSpinsCount*100)/float32(simConf.NbRun)))
 
 	// Average payroll when surviving the max number of spins
-	fmt.Fprint(simConf.Writer, s.name, ",average surviving payroll,")
+	fmt.Fprint(simConf.Writer, s.Name, ",average surviving payroll,")
 	var avgPrl int
 	var avgPrlCount int
 	for _, rr := range *r {
@@ -108,32 +107,4 @@ func IntToString2(a []int) string {
 
 type EntropyEngine interface {
 	Spin() int
-}
-
-type RandomEngine struct {
-	interval int
-}
-
-func NewRandomEngine(nb int) EntropyEngine {
-	return RandomEngine{
-		interval: nb,
-	}
-}
-
-func (r RandomEngine) Spin() int {
-	return int(rand.Int31n(int32(r.interval)))
-}
-
-type ControlledEngine struct {
-	target int
-}
-
-func NewControlledEngine(target int) EntropyEngine {
-	return ControlledEngine{
-		target: target,
-	}
-}
-
-func (c ControlledEngine) Spin() int {
-	return c.target
 }
