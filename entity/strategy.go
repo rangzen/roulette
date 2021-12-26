@@ -49,8 +49,9 @@ func NewBet(amount int, betType BetType, numbers ...int) Bet {
 }
 
 type Strategy struct {
-	Name string
-	Bets []Bet
+	Name       string
+	Bets       []Bet
+	minimalBet int
 }
 
 func NewStrategy(name string) Strategy {
@@ -61,12 +62,14 @@ func NewStrategy(name string) Strategy {
 
 func (s *Strategy) AddBet(bet Bet) {
 	s.Bets = append(s.Bets, bet)
+
+	var minimalAmount int
+	for _, b := range s.Bets {
+		minimalAmount += b.Amount
+	}
+	s.minimalBet = minimalAmount
 }
 
 func (s Strategy) MinimalBet() int {
-	var minimalAmount int
-	for _, bet := range s.Bets {
-		minimalAmount += bet.Amount
-	}
-	return minimalAmount
+	return s.minimalBet
 }
