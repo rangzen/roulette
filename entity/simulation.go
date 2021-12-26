@@ -75,7 +75,7 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 	for _, rr := range *r {
 		avg += len(rr)
 	}
-	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(avg)/float32(len(*r))))
+	fmt.Fprintf(simConf.Writer, "%.2f\n", float32(avg)/float32(len(*r)))
 
 	// Percentage of games running to the max spins limit
 	fmt.Fprint(simConf.Writer, s.Name, ",percentage of games running to the max spins limit,")
@@ -85,7 +85,7 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 			maxSpinsCount++
 		}
 	}
-	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(maxSpinsCount*100)/float32(simConf.NbRun)))
+	fmt.Fprintf(simConf.Writer, "%.2f\n", float32(maxSpinsCount*100)/float32(simConf.NbRun))
 
 	// Average payroll when surviving the max number of spins
 	fmt.Fprint(simConf.Writer, s.Name, ",average surviving payroll,")
@@ -97,7 +97,7 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 			avgPrlCount++
 		}
 	}
-	fmt.Fprintln(simConf.Writer, fmt.Sprintf("%.2f", float32(avgPrl)/float32(avgPrlCount)))
+	fmt.Fprintf(simConf.Writer, "%.2f\n", float32(avgPrl)/float32(avgPrlCount))
 }
 
 func IntToString2(a []int) string {
