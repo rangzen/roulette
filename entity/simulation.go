@@ -28,9 +28,11 @@ func NewSimulation(conf SimulationConf) Simulation {
 
 func (s *Simulation) RunWith(strategy Strategy) Results {
 	results := make(Results, 0, s.conf.NbRun)
+	ttlResultSize := 0
+	avgResultSize := 0
 	for i := 0; i < s.conf.NbRun; i++ {
 		payroll := s.conf.StartAmount
-		result := make(RunResult, 0)
+		result := make(RunResult, 0, avgResultSize)
 		for payroll >= strategy.MinimalBet() {
 			result = append(result, payroll)
 			spin := s.conf.EntropyEngine.Spin()
@@ -40,6 +42,8 @@ func (s *Simulation) RunWith(strategy Strategy) Results {
 			}
 		}
 		results = append(results, result)
+		ttlResultSize += len(result)
+		avgResultSize = ttlResultSize / (i + 1)
 	}
 	results.Print(s.conf, strategy)
 
