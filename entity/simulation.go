@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// SimulationConf describes the configuration of the Simulation
 type SimulationConf struct {
 	Writer      *os.File
 	Entropy     Entropy
@@ -16,33 +17,36 @@ type SimulationConf struct {
 	StartAmount int
 }
 
+// Simulation is the base type for any simulations
 type Simulation struct {
 	conf SimulationConf
 }
 
+// NewSimulation creates a new simulation with a particular configuration
 func NewSimulation(conf SimulationConf) Simulation {
 	return Simulation{
 		conf: conf,
 	}
 }
 
+// RunWith runs a simulation with a particular Strategy, then send back Results
 func (s *Simulation) RunWith(strategy Strategy) Results {
 	results := make(Results, 0, s.conf.NbRun)
 	ttlResultSize := 0
 	avgResultSize := 0
 	for i := 0; i < s.conf.NbRun; i++ {
-		payroll := s.conf.StartAmount
-		result := make(RunResult, 0, avgResultSize)
-		for payroll >= strategy.MinimalBet() {
-			result = append(result, payroll)
+		bankroll := s.conf.StartAmount
+		brHist := make(BankrollHistory, 0, avgResultSize)
+		for bankroll >= strategy.MinimalBet() {
+			brHist = append(brHist, bankroll)
 			spin := s.conf.Entropy.Spin()
-			payroll = payroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
-			if len(result) >= s.conf.MaxSpins {
+			bankroll = bankroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
+			if len(brHist) >= s.conf.MaxSpins {
 				break
 			}
 		}
-		results = append(results, result)
-		ttlResultSize += len(result)
+		results = append(results, brHist)
+		ttlResultSize += len(brHist)
 		avgResultSize = ttlResultSize / (i + 1)
 	}
 	results.Print(s.conf, strategy)
@@ -50,12 +54,15 @@ func (s *Simulation) RunWith(strategy Strategy) Results {
 	return results
 }
 
-type Results []RunResult
+// Results represents results from every runs
+type Results []BankrollHistory
 
-type RunResult []int
+// BankrollHistory represents the history of every bankroll before a turn during a run
+type BankrollHistory []int
 
+// Print send to a writer some statistics about the simulation's results
 func (r *Results) Print(simConf SimulationConf, s Strategy) {
-	// Payroll for each run
+	// Bankroll for each run
 	/*	for i, rr := range *r {
 			fmt.Fprintln(simConf.Writer, fmt.Sprintf("run %d,%s", i+1, IntToString2(rr)))
 		}
@@ -87,19 +94,20 @@ func (r *Results) Print(simConf SimulationConf, s Strategy) {
 	}
 	fmt.Fprintf(simConf.Writer, "%.2f\n", float32(maxSpinsCount*100)/float32(simConf.NbRun))
 
-	// Average payroll when surviving the max number of spins
-	fmt.Fprint(simConf.Writer, s.Name, ",average surviving payroll,")
-	var avgPrl int
-	var avgPrlCount int
+	// Average bankroll when surviving the max number of spins
+	fmt.Fprint(simConf.Writer, s.Name, ",average surviving bankroll,")
+	var avgBrl int
+	var avgBrlCount int
 	for _, rr := range *r {
 		if len(rr) == simConf.MaxSpins {
-			avgPrl += rr[simConf.MaxSpins-1]
-			avgPrlCount++
+			avgBrl += rr[simConf.MaxSpins-1]
+			avgBrlCount++
 		}
 	}
-	fmt.Fprintf(simConf.Writer, "%.2f\n", float32(avgPrl)/float32(avgPrlCount))
+	fmt.Fprintf(simConf.Writer, "%.2f\n", float32(avgBrl)/float32(avgBrlCount))
 }
 
+// IntToString2 is an helper to transform a slice of int into a string
 func IntToString2(a []int) string {
 	// https://stackoverflow.com/a/42159097/337726
 	b := make([]string, len(a))
@@ -109,6 +117,7 @@ func IntToString2(a []int) string {
 	return strings.Join(b, ",")
 }
 
+// Entropy represents how the random spin is done
 type Entropy interface {
 	Spin() int
 }
