@@ -1,4 +1,4 @@
-package entropy_engine
+package entropy
 
 import "roulette/entity"
 
@@ -6,7 +6,7 @@ type Controlled struct {
 	target int
 }
 
-func NewControlled(target int) entity.EntropyEngine {
+func NewControlled(target int) entity.Entropy {
 	return Controlled{
 		target: target,
 	}

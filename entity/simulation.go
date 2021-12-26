@@ -8,12 +8,12 @@ import (
 )
 
 type SimulationConf struct {
-	Writer        *os.File
-	EntropyEngine EntropyEngine
-	Roulette      Roulette
-	NbRun         int
-	MaxSpins      int
-	StartAmount   int
+	Writer      *os.File
+	Entropy     Entropy
+	Roulette    Roulette
+	NbRun       int
+	MaxSpins    int
+	StartAmount int
 }
 
 type Simulation struct {
@@ -35,7 +35,7 @@ func (s *Simulation) RunWith(strategy Strategy) Results {
 		result := make(RunResult, 0, avgResultSize)
 		for payroll >= strategy.MinimalBet() {
 			result = append(result, payroll)
-			spin := s.conf.EntropyEngine.Spin()
+			spin := s.conf.Entropy.Spin()
 			payroll = payroll - strategy.MinimalBet() + s.conf.Roulette.PayoutWith(spin, strategy)
 			if len(result) >= s.conf.MaxSpins {
 				break
@@ -109,6 +109,6 @@ func IntToString2(a []int) string {
 	return strings.Join(b, ",")
 }
 
-type EntropyEngine interface {
+type Entropy interface {
 	Spin() int
 }

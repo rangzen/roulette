@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"os"
 	"roulette/entity"
-	"roulette/usecase/entropy_engine"
+	"roulette/usecase/entropy"
 	"roulette/usecase/roulette"
 	"roulette/usecase/strategy"
 	"time"
@@ -16,12 +16,12 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	r := roulette.NewFrench()
 	conf := entity.SimulationConf{
-		Writer:        os.Stdout,
-		EntropyEngine: entropy_engine.NewRandom(r.NumberCount()),
-		Roulette:      r,
-		NbRun:         100000,
-		MaxSpins:      100,
-		StartAmount:   100,
+		Writer:      os.Stdout,
+		Entropy:     entropy.NewRandom(r.NumberCount()),
+		Roulette:    r,
+		NbRun:       100000,
+		MaxSpins:    100,
+		StartAmount: 100,
 	}
 	sim := entity.NewSimulation(conf)
 	sim.RunWith(strategy.BiColor())

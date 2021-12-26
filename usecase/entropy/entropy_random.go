@@ -1,4 +1,4 @@
-package entropy_engine
+package entropy
 
 import (
 	"math/rand"
@@ -9,7 +9,7 @@ type Random struct {
 	interval int
 }
 
-func NewRandom(nb int) entity.EntropyEngine {
+func NewRandom(nb int) entity.Entropy {
 	return Random{
 		interval: nb,
 	}
