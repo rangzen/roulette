@@ -48,3 +48,17 @@ func Zero() entity.Strategy {
 	s.AddBet(entity.NewBet(1, entity.StraightUp, 0))
 	return s
 }
+
+func CompleteBet() entity.Strategy {
+	s := entity.NewStrategy("Full bet (17)")
+	s.AddBet(entity.NewBet(1, entity.StraightUp, 17))
+	s.AddBet(entity.NewBet(1, entity.Split, 17, 14))
+	s.AddBet(entity.NewBet(1, entity.Split, 17, 18))
+	s.AddBet(entity.NewBet(1, entity.Split, 17, 16))
+	s.AddBet(entity.NewBet(1, entity.Split, 17, 20))
+	s.AddBet(entity.NewBet(1, entity.Corner, 17, 14, 15, 18))
+	s.AddBet(entity.NewBet(1, entity.Corner, 17, 18, 20, 21))
+	s.AddBet(entity.NewBet(1, entity.Corner, 17, 20, 19, 16))
+	s.AddBet(entity.NewBet(1, entity.Corner, 17, 16, 13, 14))
+	return s
+}

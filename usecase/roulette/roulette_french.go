@@ -31,6 +31,8 @@ func (f French) PayoutWith(result int, s entity.Strategy) int {
 					switch b.BetType {
 					case entity.StraightUp:
 						payout = 1 + 35
+					case entity.Split:
+						payout = 1 + 17
 					case entity.Corner:
 						payout = 1 + 8
 					case entity.DoubleStreet:
