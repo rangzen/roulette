@@ -24,6 +24,11 @@ type Simulation struct {
 
 // NewSimulation creates a new simulation with a particular configuration
 func NewSimulation(conf SimulationConf) Simulation {
+	fmt.Println("Simulation configuration:")
+	fmt.Println("  Number of runs:", conf.NbRun)
+	fmt.Println("  Max spins:", conf.MaxSpins)
+	fmt.Println("  Start amount:", conf.StartAmount)
+	fmt.Println("  Roulette:", conf.Roulette.Name())	
 	return Simulation{
 		conf: conf,
 	}
