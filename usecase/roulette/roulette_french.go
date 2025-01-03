@@ -37,6 +37,12 @@ func (f French) PayoutWith(result int, s entity.Strategy) int {
 						payout = 1 + 8
 					case entity.DoubleStreet:
 						payout = 1 + 5
+					case entity.FirstColumn:
+						payout = 1 + 2
+					case entity.SecondColumn:
+						payout = 1 + 2
+					case entity.ThirdColumn:
+						payout = 1 + 2
 					case entity.Red:
 						payout = 1 + 1
 					case entity.Black:

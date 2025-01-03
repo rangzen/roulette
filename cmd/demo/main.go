@@ -32,4 +32,5 @@ func main() {
 	sim.RunWith(strategy.DoubleStreetQuad())
 	sim.RunWith(strategy.Zero())
 	sim.RunWith(strategy.CompleteBet())
+	sim.RunWith(strategy.ThreeTwoBet())
 }

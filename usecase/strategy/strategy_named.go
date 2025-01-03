@@ -62,3 +62,10 @@ func CompleteBet() entity.Strategy {
 	s.AddBet(entity.NewBet(1, entity.Corner, 17, 16, 13, 14))
 	return s
 }
+
+func ThreeTwoBet() entity.Strategy {
+	s := entity.NewStrategy("3/2 Black version bet")
+	s.AddBet(entity.NewBet(3, entity.Black, entity.NumbersBlack...))
+	s.AddBet(entity.NewBet(2, entity.ThirdColumn, entity.NumbersThirdColumn...))
+	return s
+}

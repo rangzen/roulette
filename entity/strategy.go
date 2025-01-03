@@ -33,6 +33,9 @@ const (
 var (
 	NumbersRed   = []int{32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3}
 	NumbersBlack = []int{15, 4, 2, 17, 6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26}
+	NumbersFirstColumn  = []int{1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34}
+	NumbersSecondColumn = []int{2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35}
+	NumbersThirdColumn  = []int{3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36}
 )
 
 // Bet represents a bet that can be included in a Strategy
